@@ -7,7 +7,6 @@
 #include <tins/tins.h>
 #include <chrono>
 
-#include "protocol.h"
 #include "db.hpp"
 #include "tins/sniffer.h"
 #include "traffic_data.hpp"
