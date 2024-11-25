@@ -80,7 +80,6 @@ int main(int argc, char *argv[]) {
 
     pthread_t sniffer_threads[2];
     pthread_t report_threads;
-    void **retval = (void **)malloc(sizeof(void *) * 3);
 
     pthread_create(&sniffer_threads[0], NULL, sniffer_worker, (void *)input_sniffer.get());
     pthread_create(&sniffer_threads[1], NULL, sniffer_worker, (void *)output_sniffer.get());
@@ -99,7 +98,6 @@ int main(int argc, char *argv[]) {
 
     spdlog::info("Thread join");
 
-    pthread_join(sniffer_threads[0], &retval[0]);
-    pthread_join(sniffer_threads[1], &retval[1]);
-    pthread_join(report_threads, &retval[2]);
+    pthread_join(sniffer_threads[0], NULL);
+    pthread_join(sniffer_threads[1], NULL);
 }

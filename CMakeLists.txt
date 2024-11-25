@@ -13,16 +13,16 @@ set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 include(FetchContent)
 
 FetchContent_Declare(
-    libtins
-    GIT_REPOSITORY https://github.com/mfontanini/libtins.git
-    GIT_TAGS v4.5
+  libtins
+  GIT_REPOSITORY https://github.com/mfontanini/libtins.git
+  GIT_TAGS v4.5
 )
 FetchContent_MakeAvailable(libtins)
 
 FetchContent_Declare(
-    date
-    GIT_REPOSITORY https://github.com/HowardHinnant/date.git
-    GIT_TAGS v3.0.3
+  date
+  GIT_REPOSITORY https://github.com/HowardHinnant/date.git
+  GIT_TAGS v3.0.3
 )
 FetchContent_MakeAvailable(date)
 
@@ -34,7 +34,15 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(spdlog)
 set (SPDLOG_LIBRARIES "${CMAKE_BINARY_DIR}/_deps/spdlog-src/include")
 
+FetchContent_Declare(
+  oatpp
+  GIT_REPOSITORY https://github.com/oatpp/oatpp.git
+  GIT_TAGS 1.3.0
+)
+FetchContent_MakeAvailable(oatpp)
+
 include_directories(${libtins_SOURCE_DIR}/include)
+include_directories(${oatpp_SOURCE_DIR}/src)
 include_directories(${date_SOURCE_DIR}/include)
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
