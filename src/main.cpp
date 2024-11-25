@@ -7,6 +7,7 @@
 #include <memory>
 #include <pthread.h>
 #include <sched.h>
+#include <statgrab.h>
 #include <string>
 #include <tins/tins.h>
 
@@ -17,6 +18,7 @@
 
 #include <date/date.h>
 #include <unistd.h>
+#include "cpu.hpp"
 
 using namespace std::chrono;
 
@@ -50,9 +52,9 @@ void *print_report(void *data) {
             continue;
         }
         
-        spdlog::info("[REPORT] Timestamp {1} / Packet Loss {0}% / RECV {2} / TRANSMIT {3} / QUEUEING_DALAY {4} ms",
+        spdlog::info("[REPORT] Timestamp {1} / Packet Loss {0}% / RECV {2} / TRANSMIT {3} / QUEUEING_DALAY {4} ms / CPU {5}%",
                     traffic_stat.get_packet_loss() * 100, query_timestamp, traffic_stat.get_received_packet(),
-                    traffic_stat.get_transmitted_packet(), traffic_stat.get_queueing_delay_in_nanosecond() / 1e6);
+                    traffic_stat.get_transmitted_packet(), traffic_stat.get_queueing_delay_in_nanosecond() / 1e6, fetch_cpu_usage());
 
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
@@ -66,6 +68,9 @@ int main(int argc, char *argv[]) {
         spdlog::error("Usage: ./TRA <INPUT> <OUTPUT>");
         return 0;
     }
+
+    spdlog::info("StatGrab (SG) Init");
+    sg_init(0);
 
     std::string input_port = argv[1];
     std::string output_port = argv[2];

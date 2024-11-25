@@ -34,12 +34,14 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(spdlog)
 set (SPDLOG_LIBRARIES "${CMAKE_SOURCE_DIR}/_deps/spdlog-src/include")
 
+find_library(statgrab NAMES statgrab REQUIRED)
+
 include_directories(${libtins_SOURCE_DIR}/include)
 include_directories(${date_SOURCE_DIR}/include)
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
 add_executable(TRA src/main.cpp src/db.cpp)
 target_include_directories(TRA PRIVATE ${INCLUDE_DIR} ${SPDLOG_LIBRARIES})
-target_link_libraries(TRA PRIVATE tins date)
+target_link_libraries(TRA PRIVATE tins date statgrab)
 set_target_properties(TRA PROPERTIES LINKER_LANGUAGE CXX)
 set_target_properties(TRA PROPERTIES OUTPUT_NAME "${CMAKE_SOURCE_DIR}/build/TRA")
