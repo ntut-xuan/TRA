@@ -1,23 +1,23 @@
-#include "sniffer.hpp"
-#include "spdlog/spdlog.h"
-#include "tins/ip.h"
 #include <chrono>
 #include <cstdlib>
 #include <ctime>
+#include <date/date.h>
 #include <memory>
 #include <pthread.h>
 #include <sched.h>
 #include <string>
 #include <tins/tins.h>
+#include <unistd.h>
 
-#include "db.hpp"
+#include "sniffer.hpp"
+#include "spdlog/spdlog.h"
+#include "tins/ip.h"
 #include "tins/sniffer.h"
-#include "traffic_data.hpp"
-#include "traffic_stat.hpp"
 
 #include "cpu.hpp"
-#include <date/date.h>
-#include <unistd.h>
+#include "db.hpp"
+#include "traffic_data.hpp"
+#include "traffic_stat.hpp"
 
 using namespace std::chrono;
 

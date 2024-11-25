@@ -1,9 +1,10 @@
 #ifndef SNIFFER_HPP
 #define SNIFFER_HPP
 
-#include "tins/sniffer.h"
 #include <memory>
 #include <string>
+
+#include "tins/sniffer.h"
 
 class Sniffer {
   private:

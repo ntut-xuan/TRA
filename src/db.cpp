@@ -1,7 +1,8 @@
+#include <algorithm>
+
 #include "db.hpp"
 #include "traffic_data.hpp"
 #include "traffic_stat.hpp"
-#include <algorithm>
 
 TrafficRecordSingleton *TrafficRecordSingleton::instance = nullptr;
 pthread_mutex_t TrafficRecordSingleton::mutex;
