@@ -5,24 +5,21 @@
 
 static unsigned long long lastTotalUser, lastTotalUserLow, lastTotalSys, lastTotalIdle;
 
-inline double fetch_cpu_usage(){
+inline double fetch_cpu_usage() {
     double percent;
-    FILE* file;
+    FILE *file;
     unsigned long long totalUser, totalUserLow, totalSys, totalIdle, total;
 
     file = fopen("/proc/stat", "r");
-    fscanf(file, "cpu %llu %llu %llu %llu", &totalUser, &totalUserLow,
-        &totalSys, &totalIdle);
+    fscanf(file, "cpu %llu %llu %llu %llu", &totalUser, &totalUserLow, &totalSys, &totalIdle);
     fclose(file);
 
-    if (totalUser < lastTotalUser || totalUserLow < lastTotalUserLow ||
-        totalSys < lastTotalSys || totalIdle < lastTotalIdle){
-        //Overflow detection. Just skip this value.
+    if (totalUser < lastTotalUser || totalUserLow < lastTotalUserLow || totalSys < lastTotalSys ||
+        totalIdle < lastTotalIdle) {
+        // Overflow detection. Just skip this value.
         percent = -1.0;
-    }
-    else{
-        total = (totalUser - lastTotalUser) + (totalUserLow - lastTotalUserLow) +
-            (totalSys - lastTotalSys);
+    } else {
+        total = (totalUser - lastTotalUser) + (totalUserLow - lastTotalUserLow) + (totalSys - lastTotalSys);
         percent = total;
         total += (totalIdle - lastTotalIdle);
         percent /= total;

@@ -15,9 +15,9 @@
 #include "traffic_data.hpp"
 #include "traffic_stat.hpp"
 
+#include "cpu.hpp"
 #include <date/date.h>
 #include <unistd.h>
-#include "cpu.hpp"
 
 using namespace std::chrono;
 
@@ -40,20 +40,23 @@ void *sniffer_worker(void *data) {
 }
 
 void *print_report(void *data) {
-    while(true){
+    while (true) {
         int current_timestamp = time(0);
 
-        std::pair<int, TrafficStat> traffic_stat_pair = TrafficRecordSingleton::get_instance().get_newest_traffic_stat();
+        std::pair<int, TrafficStat> traffic_stat_pair =
+            TrafficRecordSingleton::get_instance().get_newest_traffic_stat();
         int query_timestamp = traffic_stat_pair.first;
         TrafficStat traffic_stat = traffic_stat_pair.second;
 
-        if(query_timestamp == 0){
+        if (query_timestamp == 0) {
             continue;
         }
-        
-        spdlog::info("[REPORT] Timestamp {1} / Packet Loss {0}% / RECV {2} / TRANSMIT {3} / QUEUEING_DALAY {4} ms / CPU {5}%",
-                    traffic_stat.get_packet_loss() * 100, query_timestamp, traffic_stat.get_received_packet(),
-                    traffic_stat.get_transmitted_packet(), traffic_stat.get_queueing_delay_in_nanosecond() / 1e6, fetch_cpu_usage());
+
+        spdlog::info(
+            "[REPORT] Timestamp {1} / Packet Loss {0}% / RECV {2} / TRANSMIT {3} / QUEUEING_DALAY {4} ms / CPU {5}%",
+            traffic_stat.get_packet_loss() * 100, query_timestamp, traffic_stat.get_received_packet(),
+            traffic_stat.get_transmitted_packet(), traffic_stat.get_queueing_delay_in_nanosecond() / 1e6,
+            fetch_cpu_usage());
 
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
@@ -77,7 +80,6 @@ int main(int argc, char *argv[]) {
 
     Tins::SnifferConfiguration config;
     config.set_immediate_mode(true);
-
 
     std::shared_ptr<Sniffer> input_sniffer = std::make_shared<Sniffer>(input_port);
     std::shared_ptr<Sniffer> output_sniffer = std::make_shared<Sniffer>(output_port);

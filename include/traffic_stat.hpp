@@ -26,12 +26,12 @@ class TrafficStat {
     void handle_packet(TrafficData data) {
         if (is_received_packet(data)) {
             spdlog::debug("[RESP] Receive response with identification {0} / "
-                         "Waiting Packet {1} / Timestamp {2}",
-                         data.get_identification(), this->get_wait_packet(), data.get_time_in_nanoseconds() / 1e9);
+                          "Waiting Packet {1} / Timestamp {2}",
+                          data.get_identification(), this->get_wait_packet(), data.get_time_in_nanoseconds() / 1e9);
             add_transmit_packet(data);
         } else {
             spdlog::debug("[REQ] Receive request with identification {0} / Timestamp {1}", data.get_identification(),
-                         data.get_time_in_nanoseconds() / 1e9);
+                          data.get_time_in_nanoseconds() / 1e9);
             add_request_packet(data);
         }
     }

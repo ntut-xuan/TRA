@@ -23,10 +23,10 @@ void TrafficRecordSingleton::handle_data(TrafficData data) {
 
     int identification = data.get_identification();
     int timestamp = data.get_time_in_nanoseconds() / 1e9;
-    
+
     newset_timestamp = std::max(timestamp, newset_timestamp);
 
-    if (traffic_stat_with_timestamp_key.count(timestamp) == 0){
+    if (traffic_stat_with_timestamp_key.count(timestamp) == 0) {
         traffic_stat_with_timestamp_key[timestamp] = TrafficStat();
     }
 
@@ -35,12 +35,12 @@ void TrafficRecordSingleton::handle_data(TrafficData data) {
     pthread_mutex_unlock(&mutex);
 }
 
-std::pair<int, TrafficStat> TrafficRecordSingleton::get_newest_traffic_stat(){
+std::pair<int, TrafficStat> TrafficRecordSingleton::get_newest_traffic_stat() {
     pthread_mutex_lock(&mutex);
 
-    TrafficStat traffic_stat = traffic_stat_with_timestamp_key[newset_timestamp-1];
+    TrafficStat traffic_stat = traffic_stat_with_timestamp_key[newset_timestamp - 1];
 
     pthread_mutex_unlock(&mutex);
 
-    return std::pair<int, TrafficStat>(newset_timestamp-1, traffic_stat);
+    return std::pair<int, TrafficStat>(newset_timestamp - 1, traffic_stat);
 }
