@@ -20,6 +20,7 @@ class TrafficRecordSingleton {
     static TrafficRecordSingleton get_instance();
     void handle_data(TrafficData data);
     std::pair<int, TrafficStat> get_newest_traffic_stat();
+    TrafficStat get_traffic_stat(int timestamp);
 };
 
 #endif

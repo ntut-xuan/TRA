@@ -42,15 +42,9 @@ void *sniffer_worker(void *data) {
 void *print_report(void *data) {
     while (true) {
         int current_timestamp = time(0);
+        int query_timestamp = current_timestamp - 1;
 
-        std::pair<int, TrafficStat> traffic_stat_pair =
-            TrafficRecordSingleton::get_instance().get_newest_traffic_stat();
-        int query_timestamp = traffic_stat_pair.first;
-        TrafficStat traffic_stat = traffic_stat_pair.second;
-
-        if (query_timestamp == 0) {
-            continue;
-        }
+        TrafficStat traffic_stat = TrafficRecordSingleton::get_instance().get_traffic_stat(query_timestamp);
 
         spdlog::info(
             "[REPORT] Timestamp {1} / Packet Loss {0}% / RECV {2} / TRANSMIT {3} / QUEUEING_DALAY {4} ms / CPU {5}%",

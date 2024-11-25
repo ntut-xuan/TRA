@@ -43,3 +43,13 @@ std::pair<int, TrafficStat> TrafficRecordSingleton::get_newest_traffic_stat() {
 
     return std::pair<int, TrafficStat>(newset_timestamp - 1, traffic_stat);
 }
+
+TrafficStat TrafficRecordSingleton::get_traffic_stat(int timestamp) {
+    pthread_mutex_lock(&mutex);
+
+    TrafficStat traffic_stat = traffic_stat_with_timestamp_key[timestamp];
+
+    pthread_mutex_unlock(&mutex);
+
+    return traffic_stat;
+}
