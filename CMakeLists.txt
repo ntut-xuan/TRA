@@ -32,7 +32,7 @@ FetchContent_Declare(
   GIT_TAG v1.14.1 # or the version you want to use
 )
 FetchContent_MakeAvailable(spdlog)
-set (SPDLOG_LIBRARIES "${CMAKE_BINARY_DIR}/_deps/spdlog-src/include")
+set (SPDLOG_LIBRARIES "${CMAKE_SOURCE_DIR}/_deps/spdlog-src/include")
 
 include_directories(${libtins_SOURCE_DIR}/include)
 include_directories(${date_SOURCE_DIR}/include)
@@ -42,4 +42,4 @@ add_executable(TRA src/main.cpp src/db.cpp)
 target_include_directories(TRA PRIVATE ${INCLUDE_DIR} ${SPDLOG_LIBRARIES})
 target_link_libraries(TRA PRIVATE tins date)
 set_target_properties(TRA PROPERTIES LINKER_LANGUAGE CXX)
-set_target_properties(TRA PROPERTIES OUTPUT_NAME "${CMAKE_BINARY_DIR}/build/TRA")
+set_target_properties(TRA PROPERTIES OUTPUT_NAME "${CMAKE_SOURCE_DIR}/build/TRA")

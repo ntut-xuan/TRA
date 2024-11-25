@@ -7,12 +7,13 @@
 #include "traffic_data.hpp"
 
 class TrafficRecordSingleton {
-private:
-    static TrafficRecordSingleton* instance;
+  private:
+    static TrafficRecordSingleton *instance;
     static pthread_mutex_t mutex;
     static std::map<int, TrafficData> traffic_data_with_identification_key;
-    TrafficRecordSingleton(){}
-public:
+    TrafficRecordSingleton() {}
+
+  public:
     static TrafficRecordSingleton get_instance();
     void handle_data(TrafficData data);
 };
