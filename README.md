@@ -18,15 +18,15 @@ cmake --build
 We provide a docker for build environment. It provide two test device and already configure the tra-node as the gateway.
 
 ```
-+------------------------+                          +-----------------------=-+
-|                   LAN1 |                          | LAN2                    |
-|    +------------+      |      +------------+      |      +------------+     |
-|    +            +      |      +            +      |      +            +     |
-|    +  DEVICE-1  + -----|----- +  TRA-NODE  + -----|----- +  DEVICE-2  +     |
-|    +            +      |      +            +      |      +            +     |
-|    +------------+      |      +------------+      |      +------------+     |
-|                        |                          |                         |
-+------------------------+                          +-------------------------+
++------------------------+                          +------------------------+
+|                   LAN1 |                          | LAN2                   |
+|    +------------+      |      +------------+      |      +------------+    |
+|    +            +      |      +            +      |      +            +    |
+|    +  DEVICE-1  + -----|----- +  TRA-NODE  + -----|----- +  DEVICE-2  +    |
+|    +            +      |      +            +      |      +            +    |
+|    +------------+      |      +------------+      |      +------------+    |
+|                        |                          |                        |
++------------------------+                          +------------------------+
 ```
 
 We expected that `DEVICE-1` and `DEVICE-2` will communicate through `TRA-NODE`. `TRA-NODE` will sniff two interface which connect `DEVICE-1` and `DEVICE-2`.
