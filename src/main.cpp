@@ -7,7 +7,6 @@
 #include <memory>
 #include <pthread.h>
 #include <sched.h>
-#include <statgrab.h>
 #include <string>
 #include <tins/tins.h>
 
@@ -68,9 +67,6 @@ int main(int argc, char *argv[]) {
         spdlog::error("Usage: ./TRA <INPUT> <OUTPUT>");
         return 0;
     }
-
-    spdlog::info("StatGrab (SG) Init");
-    sg_init(0);
 
     std::string input_port = argv[1];
     std::string output_port = argv[2];

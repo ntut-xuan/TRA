@@ -2,7 +2,6 @@
 #define CPU_HPP
 
 #include <cstdio>
-#include <statgrab.h>
 
 static unsigned long long lastTotalUser, lastTotalUserLow, lastTotalSys, lastTotalIdle;
 
