@@ -1,6 +1,7 @@
 #ifndef TRAFFIC_STAT_HPP
 #define TRAFFIC_STAT_HPP
 
+#include "filter.hpp"
 #include "spdlog/spdlog.h"
 #include "traffic_data.hpp"
 
@@ -24,12 +25,12 @@ class TrafficStat {
         waiting_set.erase(data);
     }
     void handle_packet(TrafficData data) {
-        if (is_received_packet(data)) {
+        if (is_received_packet(data) && data.get_type() == PacketType::TCP || data.get_type() == PacketType::UDP || data.get_type() == PacketType::ICMP) {
             spdlog::debug("[RESP] Receive response with identification {0} / "
                          "Waiting Packet {1} / Timestamp {2}",
                          data.get_identification(), this->get_wait_packet(), data.get_time_in_nanoseconds() / 1e9);
             add_transmit_packet(data);
-        } else {
+        } else if(data.get_type() == PacketType::GTPU) {
             spdlog::debug("[REQ] Receive request with identification {0} / Timestamp {1}", data.get_identification(),
                          data.get_time_in_nanoseconds() / 1e9);
             add_request_packet(data);

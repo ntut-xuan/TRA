@@ -1,3 +1,4 @@
+#include "filter.hpp"
 #include "sniffer.hpp"
 #include "spdlog/spdlog.h"
 #include "tins/ip.h"
@@ -12,6 +13,7 @@
 #include <tins/tins.h>
 
 #include "db.hpp"
+#include "tins/packet.h"
 #include "tins/sniffer.h"
 #include "traffic_data.hpp"
 #include "traffic_stat.hpp"
@@ -31,8 +33,9 @@ void *sniffer_worker(void *data) {
         auto current_time = system_clock::now();
         auto current_time_nanosecond = date::floor<nanoseconds>(current_time);
         Tins::IP packet = pdu.rfind_pdu<Tins::IP>();
+        Tins::Packet raw_packet = Tins::Packet(pdu);
         TrafficRecordSingleton::get_instance().handle_data(
-            TrafficData(current_time.time_since_epoch().count(), packet.protocol(),
+            TrafficData(current_time.time_since_epoch().count(), get_packet_type(raw_packet),
                         packet.src_addr().to_string().c_str(), packet.dst_addr().to_string().c_str(), packet.id()));
         return true;
     });
