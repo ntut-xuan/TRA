@@ -1,8 +1,7 @@
 #ifndef CPU_HPP
 #define CPU_HPP
 
-#include "spdlog/spdlog.h"
-#include <cstddef>
+#include <cstdio>
 #include <statgrab.h>
 
 static unsigned long long lastTotalUser, lastTotalUserLow, lastTotalSys, lastTotalIdle;
