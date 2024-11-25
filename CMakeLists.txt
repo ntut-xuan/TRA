@@ -32,7 +32,7 @@ FetchContent_Declare(
   GIT_TAG v1.14.1 # or the version you want to use
 )
 FetchContent_MakeAvailable(spdlog)
-set (SPDLOG_LIBRARIES "${CMAKE_SOURCE_DIR}/_deps/spdlog-src/include")
+set (SPDLOG_LIBRARIES "${CMAKE_BINARY_DIR}/_deps/spdlog-src/include")
 
 include_directories(${libtins_SOURCE_DIR}/include)
 include_directories(${date_SOURCE_DIR}/include)
