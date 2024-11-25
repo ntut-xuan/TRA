@@ -18,7 +18,15 @@ class TrafficData {
         : nanoseconds(nanoseconds), type(type), source_ip(source_ip), destination_ip(destination_ip),
           identification(identification) {}
 
-    long long get_time_in_nanoseconds() { return nanoseconds; }
+    bool operator==(const TrafficData& other_traffic_data) const {
+      return identification == other_traffic_data.identification;
+    }
+
+    bool operator<(const TrafficData& other_traffic_data) const {
+      return identification < other_traffic_data.identification;
+    }
+
+    long long get_time_in_nanoseconds() const { return nanoseconds; }
 
     int get_type() { return type; }
 
