@@ -1,5 +1,4 @@
 #include "db.hpp"
-#include "spdlog/spdlog.h"
 #include "traffic_data.hpp"
 #include "traffic_stat.hpp"
 #include <algorithm>
