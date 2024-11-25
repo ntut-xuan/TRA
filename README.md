@@ -4,6 +4,10 @@ TRA (Traffic Realtime Analysis) is an application to fetch packet loss and queue
 
 With TRA, it can sniff receive packet and transmit packet and check the packet is transmit through your service successfully or not.
 
+## OS Requirement
+
+TRA only support on Linux with `libpcap` library. Please take a look about [Installation](#Installation) part.
+
 ## Installation
 
 TRA need `libpcap` to build, please make sure that you already have `libpcap-dev` first.
