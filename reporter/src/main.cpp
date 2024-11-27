@@ -33,7 +33,7 @@ int main(int argc, char *argv[]) {
         std::vector<uint8_t> buf_vec = std::vector<uint8_t>(buf, buf + 512);
         StatusPFCP pfcp(buf_vec);
         spdlog::info("[REPORT] [{2}] Packet Size {0} / Packet Loss {1} / Queueing Delay {3} / CPU {4}%",
-                     recv_result.value(), pfcp.get_packet_loss(), pfcp.get_ip_address(), pfcp.get_queueing_delay(),
+                     recv_result.value(), pfcp.get_packet_loss(), pfcp.get_ip_address_str(), pfcp.get_queueing_delay(),
                      pfcp.get_cpu_usage());
     }
 

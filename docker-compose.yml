@@ -75,7 +75,7 @@ services:
     environment:
       INPUT: "eth10"
       OUTPUT: "eth20"
-      SELF_IP: "192.168.10.110"
+      SELF_IP: "192.168.8.11"
       CONTROLLER_IP: "192.168.10.5"
     networks:
       default:
@@ -97,7 +97,7 @@ services:
     environment:
       INPUT: "eth30"
       OUTPUT: "eth40"
-      SELF_IP: "192.168.10.111"
+      SELF_IP: "192.168.8.12"
       CONTROLLER_IP: "192.168.10.5"
     networks:
       default:
