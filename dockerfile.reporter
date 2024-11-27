@@ -1,0 +1,11 @@
+FROM alpine
+
+RUN apk add cmake g++ git make libpcap-dev alpine-sdk linux-headers python3 tcpdump ninja
+COPY . /tra-reporter
+
+WORKDIR /tra-reporter
+RUN mkdir ./build
+RUN cmake -Bbuild . -GNinja
+RUN cmake --build ./build
+
+CMD ./build/TRA-REPORTER $SELF_IP

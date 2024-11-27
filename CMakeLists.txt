@@ -7,9 +7,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(LIBTINS_ENABLE_CXX11 1)
 
-set(SRC_DIR ${CMAKE_SOURCE_DIR}/src)
-set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
-
 include(FetchContent)
 
 FetchContent_Declare(
@@ -40,15 +37,21 @@ FetchContent_Declare(
   GIT_TAGS v1.0.0
 )
 FetchContent_MakeAvailable(sockpp)
+set (SOCKPP_LIBRARIES "${CMAKE_BINARY_DIR}/_deps/sockpp-src/include")
 
 include_directories(${libtins_SOURCE_DIR}/include)
-include_directories(${oatpp_SOURCE_DIR}/src)
 include_directories(${date_SOURCE_DIR}/include)
 include_directories(${CMAKE_SOURCE_DIR}/include)
 include_directories(${sockpp_SOURCE_DIR}/include)
 
-add_executable(TRA src/main.cpp src/db.cpp src/config.cpp)
+add_executable(TRA  node/src/main.cpp  node/src/db.cpp node/src/config.cpp)
 target_include_directories(TRA PRIVATE ${INCLUDE_DIR} ${SPDLOG_LIBRARIES})
 target_link_libraries(TRA PRIVATE tins date)
 set_target_properties(TRA PROPERTIES LINKER_LANGUAGE CXX)
 set_target_properties(TRA PROPERTIES OUTPUT_NAME "${CMAKE_SOURCE_DIR}/build/TRA")
+
+add_executable(TRA-REPORTER reporter/src/main.cpp)
+target_include_directories(TRA-REPORTER PRIVATE ${INCLUDE_DIR} ${SPDLOG_LIBRARIES} ${SOCKPP_LIBRARIES})
+target_link_libraries(TRA-REPORTER PRIVATE tins date sockpp)
+set_target_properties(TRA-REPORTER PROPERTIES LINKER_LANGUAGE CXX)
+set_target_properties(TRA-REPORTER PROPERTIES OUTPUT_NAME "${CMAKE_SOURCE_DIR}/build/TRA-REPORTER")

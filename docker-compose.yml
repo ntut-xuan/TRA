@@ -1,6 +1,8 @@
 services:
   tra-device1:
-    build: ./node_build
+    build:
+      context: .
+      dockerfile: dockerfile.device
     tty: true
     networks:
       default:
@@ -15,7 +17,9 @@ services:
           ip route add default via 192.168.20.102 &&
           tail -f /dev/null"
   tra-device2:
-    build: ./node_build
+    build:
+      context: .
+      dockerfile: dockerfile.device
     tty: true
     networks:
       default:
@@ -30,7 +34,9 @@ services:
           ip route add default via 192.168.30.102 &&
           tail -f /dev/null"
   tra-device3:
-    build: ./node_build
+    build:
+      context: .
+      dockerfile: dockerfile.device
     tty: true
     networks:
       default:
@@ -45,7 +51,9 @@ services:
           ip route add default via 192.168.40.102 &&
           tail -f /dev/null"
   tra-device4:
-    build: ./node_build
+    build:
+      context: .
+      dockerfile: dockerfile.device
     tty: true
     networks:
       default:
@@ -60,12 +68,14 @@ services:
           ip route add default via 192.168.50.102 &&
           tail -f /dev/null"
   tra-node1:
-    build: .
+    build:
+      context: .
+      dockerfile: dockerfile.node
     tty: true
     environment:
       INPUT: "eth10"
       OUTPUT: "eth20"
-      UPF_N4_IP: "192.168.10.110"
+      SELF_IP: "192.168.10.110"
       CONTROLLER_IP: "192.168.10.5"
     networks:
       default:
@@ -80,12 +90,14 @@ services:
     sysctls:
       - net.ipv4.ip_forward=1
   tra-node2:
-    build: .
+    build:
+      context: .
+      dockerfile: dockerfile.node
     tty: true
     environment:
       INPUT: "eth30"
       OUTPUT: "eth40"
-      UPF_N4_IP: "192.168.10.111"
+      SELF_IP: "192.168.10.111"
       CONTROLLER_IP: "192.168.10.5"
     networks:
       default:
@@ -100,7 +112,11 @@ services:
     sysctls:
       - net.ipv4.ip_forward=1
   tra-ctrl:
-    build: ./node_build
+    build:
+      context: .
+      dockerfile: dockerfile.reporter
+    environment:
+      SELF_IP: "192.168.10.5"
     tty: true
     networks:
       default:
