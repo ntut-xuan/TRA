@@ -1,6 +1,7 @@
 # TRA (Traffic Realtime Analysis)
 
-> We call it TRA just because the name is conlision on [Taiwan Railway Administration（臺鐵）](https://en.wikipedia.org/wiki/Taiwan_Railways_Administration) and it's fun.
+> We call it TRA just because the name is coincides with [Taiwan Railway Administration（臺鐵）](https://en.wikipedia.org/wiki/Taiwan_Railways_Administration) and it's fun.
+>
 > The packet may delay but it will reach the destination, LOL.
 
 TRA (Traffic Realtime Analysis) is an application to fetch packet loss and queueing delay between two network interface.
