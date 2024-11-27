@@ -1,10 +1,11 @@
 #include "sockpp/result.h"
-#include "sockpp/sock_address.h"
 #include <sockpp/socket.h>
 #include <sockpp/udp_socket.h>
+#include <string>
 
 #include "reporter_socket.hpp"
 #include "spdlog/spdlog.h"
+#include "status_pfcp.hpp"
 
 int main(int argc, char *argv[]) {
     if (argc < 2) {
@@ -29,7 +30,11 @@ int main(int argc, char *argv[]) {
     typename sockpp::udp_socket::addr_t srcAddr;
 
     while ((recv_result = sock.recv_from(buf, sizeof(buf), &srcAddr)).value() > 0) {
-        spdlog::info("[REPORT] Packet Size {0}", recv_result.value());
+        std::vector<uint8_t> buf_vec = std::vector<uint8_t>(buf, buf + 512);
+        StatusPFCP pfcp(buf_vec);
+        spdlog::info("[REPORT] [{2}] Packet Size {0} / Packet Loss {1} / Queueing Delay {3} / CPU {4}%",
+                     recv_result.value(), pfcp.get_packet_loss(), pfcp.get_ip_address(), pfcp.get_queueing_delay(),
+                     pfcp.get_cpu_usage());
     }
 
     return 0;

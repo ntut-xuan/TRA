@@ -8,4 +8,4 @@ RUN mkdir ./build
 RUN cmake -Bbuild . -GNinja
 RUN cmake --build ./build
 
-CMD ./build/TRA-REPORTER $SELF_IP
+# CMD ./build/TRA-REPORTER $SELF_IP

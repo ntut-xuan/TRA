@@ -42,7 +42,7 @@ set (SOCKPP_LIBRARIES "${CMAKE_BINARY_DIR}/_deps/sockpp-src/include")
 include_directories(${libtins_SOURCE_DIR}/include)
 include_directories(${date_SOURCE_DIR}/include)
 include_directories(${CMAKE_SOURCE_DIR}/include)
-include_directories(${sockpp_SOURCE_DIR}/include)
+include_directories(${SOCKPP_LIBRARIES})
 
 add_executable(TRA  node/src/main.cpp  node/src/db.cpp node/src/config.cpp)
 target_include_directories(TRA PRIVATE ${INCLUDE_DIR} ${SPDLOG_LIBRARIES})
