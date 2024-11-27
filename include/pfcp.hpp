@@ -5,7 +5,7 @@
 #include <cmath>
 #include <vector>
 
-#define EXTRACT_FLOAT(x) std::round(((x)-std::round(x)) * 1e6);
+#define EXTRACT_FLOAT(x) std::round(((x) - std::round(x)) * 1e6);
 
 static void concatenate_uint8t_array(std::vector<uint8_t> &array, std::vector<uint8_t> other) {
     array.insert(array.end(), other.begin(), other.end());
@@ -50,11 +50,11 @@ inline std::vector<uint8_t> convert_traffic_stat_into_pfcp_packet(TrafficStat st
     concatenate_uint8t_array(packet, to_uint8_t_arrays(packet_loss_float, 4)); // PACKET LOST FLOAT
 
     /* Packet Loss */
-    double queueing_delay_millisecond = stat.get_queueing_delay_in_nanosecond() * 1e6;
+    double queueing_delay_millisecond = stat.get_queueing_delay_in_nanosecond() / 1e6;
     int queueing_delay_millisecond_int = std::round(queueing_delay_millisecond);
     int queueing_delay_millisecond_float = EXTRACT_FLOAT(queueing_delay_millisecond);
-    concatenate_uint8t_array(packet, to_uint8_t_arrays(packet_loss_int, 4));   // QUEUEING DELAY INT
-    concatenate_uint8t_array(packet, to_uint8_t_arrays(packet_loss_float, 4)); // QUEUEING DELAY FLOAT
+    concatenate_uint8t_array(packet, to_uint8_t_arrays(queueing_delay_millisecond_int, 4));   // QUEUEING DELAY INT
+    concatenate_uint8t_array(packet, to_uint8_t_arrays(queueing_delay_millisecond_float, 4)); // QUEUEING DELAY FLOAT
 
     /* ---------------- */
 

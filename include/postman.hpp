@@ -21,7 +21,7 @@ inline static void submit_report(TrafficStat stat, std::string dest_ip, int port
     spdlog::info("[SUBMIT] Send traffic report / Timestamp {0} / UPF N4 IP {1} / Packet Loss {2} / Queueing Delay {3} "
                  "/ CPU {4}%",
                  stat.get_timestamp(), convert_uint32t_ip_to_str(stat.get_upf_n4_ip()), stat.get_packet_loss(),
-                 stat.get_queueing_delay_in_nanosecond() * 1e6, stat.get_cpu_usage());
+                 stat.get_queueing_delay_in_nanosecond() / 1e6, stat.get_cpu_usage());
 }
 
 #endif

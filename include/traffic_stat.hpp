@@ -6,6 +6,7 @@
 #include "ip_util.hpp"
 #include "spdlog/spdlog.h"
 #include "traffic_data.hpp"
+#include <climits>
 
 class TrafficStat {
   private:
@@ -31,7 +32,8 @@ class TrafficStat {
     void add_transmit_packet(TrafficData data) {
         auto req_packet = waiting_set.find(data);
         if (waiting_set.find(data) != waiting_set.end()) {
-            total_delay_time_in_nanosecond += data.get_time_in_nanoseconds() - req_packet->get_time_in_nanoseconds();
+            total_delay_time_in_nanosecond +=
+                std::abs(data.get_time_in_nanoseconds() - req_packet->get_time_in_nanoseconds());
         }
         waiting_set.erase(data);
     }
@@ -53,8 +55,18 @@ class TrafficStat {
         }
         return false;
     }
-    double get_packet_loss() { return waiting_set.size() * 1.0 / receive_set.size(); }
-    double get_queueing_delay_in_nanosecond() { return total_delay_time_in_nanosecond * 1.0 / receive_set.size(); }
+    double get_packet_loss() {
+        if (receive_set.size() == 0) {
+            return 0;
+        }
+        return waiting_set.size() * 1.0 / receive_set.size();
+    }
+    double get_queueing_delay_in_nanosecond() {
+        if (receive_set.size() == 0) {
+            return 0;
+        }
+        return total_delay_time_in_nanosecond * 1.0 / receive_set.size();
+    }
     int get_wait_packet() { return waiting_set.size(); }
     int get_received_packet() { return receive_set.size(); }
     int get_transmitted_packet() { return receive_set.size() - waiting_set.size(); }
