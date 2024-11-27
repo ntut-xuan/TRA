@@ -14,6 +14,7 @@ class TrafficRecordSingleton {
     static std::map<int, TrafficData> traffic_data_with_identification_key;
     static std::map<int, TrafficStat> traffic_stat_with_timestamp_key;
     static int newset_timestamp;
+    static uint32_t upfn4ip;
     TrafficRecordSingleton() {}
 
   public:
@@ -21,6 +22,7 @@ class TrafficRecordSingleton {
     void handle_data(TrafficData data);
     std::pair<int, TrafficStat> get_newest_traffic_stat();
     TrafficStat get_traffic_stat(int timestamp);
+    void setup_upfn4ip(uint32_t ip);
 };
 
 #endif

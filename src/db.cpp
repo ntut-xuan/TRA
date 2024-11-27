@@ -9,6 +9,7 @@ pthread_mutex_t TrafficRecordSingleton::mutex;
 std::map<int, TrafficData> TrafficRecordSingleton::traffic_data_with_identification_key;
 std::map<int, TrafficStat> TrafficRecordSingleton::traffic_stat_with_timestamp_key;
 int TrafficRecordSingleton::newset_timestamp = 0;
+uint32_t TrafficRecordSingleton::upfn4ip = 0;
 
 TrafficRecordSingleton TrafficRecordSingleton::get_instance() {
     if (instance == nullptr) {
@@ -17,6 +18,8 @@ TrafficRecordSingleton TrafficRecordSingleton::get_instance() {
     }
     return *instance;
 }
+
+void TrafficRecordSingleton::setup_upfn4ip(uint32_t ip) { this->upfn4ip = ip; }
 
 void TrafficRecordSingleton::handle_data(TrafficData data) {
     pthread_mutex_lock(&mutex);
@@ -27,7 +30,7 @@ void TrafficRecordSingleton::handle_data(TrafficData data) {
     newset_timestamp = std::max(timestamp, newset_timestamp);
 
     if (traffic_stat_with_timestamp_key.count(timestamp) == 0) {
-        traffic_stat_with_timestamp_key[timestamp] = TrafficStat();
+        traffic_stat_with_timestamp_key[timestamp] = TrafficStat(upfn4ip, timestamp);
     }
 
     traffic_stat_with_timestamp_key[timestamp].handle_packet(data);

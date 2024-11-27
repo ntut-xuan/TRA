@@ -35,18 +35,19 @@ FetchContent_MakeAvailable(spdlog)
 set (SPDLOG_LIBRARIES "${CMAKE_BINARY_DIR}/_deps/spdlog-src/include")
 
 FetchContent_Declare(
-  oatpp
-  GIT_REPOSITORY https://github.com/oatpp/oatpp.git
-  GIT_TAGS 1.3.0
+  sockpp
+  GIT_REPOSITORY https://github.com/fpagliughi/sockpp.git
+  GIT_TAGS v1.0.0
 )
-FetchContent_MakeAvailable(oatpp)
+FetchContent_MakeAvailable(sockpp)
 
 include_directories(${libtins_SOURCE_DIR}/include)
 include_directories(${oatpp_SOURCE_DIR}/src)
 include_directories(${date_SOURCE_DIR}/include)
 include_directories(${CMAKE_SOURCE_DIR}/include)
+include_directories(${sockpp_SOURCE_DIR}/include)
 
-add_executable(TRA src/main.cpp src/db.cpp)
+add_executable(TRA src/main.cpp src/db.cpp src/config.cpp)
 target_include_directories(TRA PRIVATE ${INCLUDE_DIR} ${SPDLOG_LIBRARIES})
 target_link_libraries(TRA PRIVATE tins date)
 set_target_properties(TRA PROPERTIES LINKER_LANGUAGE CXX)

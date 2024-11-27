@@ -9,6 +9,9 @@
 #include <tins/tins.h>
 #include <unistd.h>
 
+#include "config.hpp"
+#include "ip_util.hpp"
+#include "postman.hpp"
 #include "sniffer.hpp"
 #include "spdlog/spdlog.h"
 #include "tins/ip.h"
@@ -50,7 +53,9 @@ void *print_report(void *data) {
             "[REPORT] Timestamp {1} / Packet Loss {0}% / RECV {2} / TRANSMIT {3} / QUEUEING_DALAY {4} ms / CPU {5}%",
             traffic_stat.get_packet_loss() * 100, query_timestamp, traffic_stat.get_received_packet(),
             traffic_stat.get_transmitted_packet(), traffic_stat.get_queueing_delay_in_nanosecond() / 1e6,
-            fetch_cpu_usage());
+            traffic_stat.get_cpu_usage());
+
+        submit_report(traffic_stat, ConfigSingleton::get_controller_ip(), 8805);
 
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
@@ -61,16 +66,38 @@ void *print_report(void *data) {
 int main(int argc, char *argv[]) {
     if (argc < 3) {
         spdlog::error("Error: Should have two port.");
-        spdlog::error("Usage: ./TRA <INPUT> <OUTPUT>");
+        spdlog::error("Usage: ./TRA <INPUT> <OUTPUT> <UPFN4IP> | <CONTROLLER_IP> ");
+        return 0;
+    }
+
+    if (argc < 4) {
+        spdlog::error("Error: Should have UPF N4 IP.");
+        spdlog::error("Usage: ./TRA <INPUT> <OUTPUT> <UPFN4IP> | <CONTROLLER_IP> ");
         return 0;
     }
 
     std::string input_port = argv[1];
     std::string output_port = argv[2];
+    std::string upfn4ip = argv[3];
+
+    ConfigSingleton::get_instance().setup_upf_n4_ip(upfn4ip);
+
+    if (argc == 5) {
+        std::string controller_ip = argv[4];
+        ConfigSingleton::get_instance().setup_controller_ip(controller_ip);
+    }
 
     spdlog::info("Input Port: {0}", input_port);
     spdlog::info("Output Port: {0}", output_port);
+    spdlog::info("IP: {0}({1})", upfn4ip, convert_ip_str_to_uint32_t(upfn4ip));
+
+    if (ConfigSingleton::get_instance().is_setup_controller_ip()) {
+        spdlog::info("Controller IP: {0}", ConfigSingleton::get_controller_ip());
+    }
+
     spdlog::info("Start to capture the packet.");
+
+    TrafficRecordSingleton::get_instance().setup_upfn4ip(convert_ip_str_to_uint32_t(upfn4ip));
 
     Tins::SnifferConfiguration config;
     config.set_immediate_mode(true);

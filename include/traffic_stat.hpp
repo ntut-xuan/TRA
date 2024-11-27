@@ -1,17 +1,29 @@
 #ifndef TRAFFIC_STAT_HPP
 #define TRAFFIC_STAT_HPP
 
+#include "config.hpp"
+#include "cpu.hpp"
+#include "ip_util.hpp"
 #include "spdlog/spdlog.h"
 #include "traffic_data.hpp"
 
 class TrafficStat {
   private:
-    int cpu_usage;
-    long long total_delay_time_in_nanosecond;
+    int cpu_usage = 0;
+    uint32_t upfn4ip = 0;
+    int timestamp = 0;
+    long long total_delay_time_in_nanosecond = 0;
     std::set<TrafficData> receive_set;
     std::set<TrafficData> waiting_set;
 
   public:
+    TrafficStat() : upfn4ip(0), timestamp(0), cpu_usage(fetch_cpu_usage()) {
+        this->upfn4ip = convert_ip_str_to_uint32_t(ConfigSingleton::get_upf_n4_ip());
+    }
+    TrafficStat(uint32_t upfn4ip, int timestamp) : cpu_usage(fetch_cpu_usage()) {
+        this->upfn4ip = upfn4ip;
+        this->timestamp = timestamp;
+    }
     void add_request_packet(TrafficData data) {
         receive_set.insert(data);
         waiting_set.insert(data);
@@ -46,6 +58,9 @@ class TrafficStat {
     int get_wait_packet() { return waiting_set.size(); }
     int get_received_packet() { return receive_set.size(); }
     int get_transmitted_packet() { return receive_set.size() - waiting_set.size(); }
+    int get_cpu_usage() { return cpu_usage; }
+    int get_upf_n4_ip() { return upfn4ip; }
+    int get_timestamp() { return timestamp; }
 };
 
 #endif
