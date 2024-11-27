@@ -1,75 +1,80 @@
 services:
-    tra-device1:
-        build: ./node_build
-        tty: true
-        networks:
-          default:
-            ipv4_address: 192.168.10.120
-          lan01:
-            ipv4_address: 192.168.20.103
-        cap_add:
-          - NET_ADMIN
-          - SYS_MODULE
-        command: >-
-            sh -c "ip route del default &&
-                ip route add default via 192.168.20.102 &&
-                tail -f /dev/null"
-    tra-device2:
-        build: ./node_build
-        tty: true
-        networks:
-          default:
-            ipv4_address: 192.168.10.130
-          lan02:
-            ipv4_address: 192.168.30.103
-        cap_add:
-          - NET_ADMIN
-          - SYS_MODULE
-        command: >-
-            sh -c "ip route del default &&
-                ip route add default via 192.168.30.102 &&
-                tail -f /dev/null"
-    tra-node:
-        build: .
-        tty: true
-        networks:
-          default:
-            ipv4_address: 192.168.10.110
-          lan01:
-            ipv4_address: 192.168.20.102
-          lan02:
-            ipv4_address: 192.168.30.102
-        cap_add:
-          - NET_ADMIN
-          - SYS_MODULE
-        sysctls:
-          - net.ipv4.ip_forward=1
+  tra-device1:
+    build: ./node_build
+    tty: true
+    networks:
+      default:
+        ipv4_address: 192.168.10.120
+      lan01:
+        ipv4_address: 192.168.20.103
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    command: >-
+      sh -c "ip route del default &&
+          ip route add default via 192.168.20.102 &&
+          tail -f /dev/null"
+  tra-device2:
+    build: ./node_build
+    tty: true
+    networks:
+      default:
+        ipv4_address: 192.168.10.130
+      lan02:
+        ipv4_address: 192.168.30.103
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    command: >-
+      sh -c "ip route del default &&
+          ip route add default via 192.168.30.102 &&
+          tail -f /dev/null"
+  tra-node:
+    build: .
+    tty: true
+    environment:
+      INPUT: "eth10"
+      OUTPUT: "eth20"
+      UPF_N4_IP: "192.168.10.110"
+      CONTROLLER_IP: "192.168.10.110"
+    networks:
+      default:
+        ipv4_address: 192.168.10.110
+      lan01:
+        ipv4_address: 192.168.20.102
+      lan02:
+        ipv4_address: 192.168.30.102
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    sysctls:
+      - net.ipv4.ip_forward=1
 
 networks:
-    default:
-        driver: bridge
-        driver_opts:
-          com.docker.network.bridge.enable_ip_masquerade: 'true'
-          com.docker.network.bridge.gateway_mode_ipv4: 'nat'
-          com.docker.network.container_iface_prefix: 'eth'
-        ipam:
-          config:
-            - subnet: 192.168.10.0/24
-    lan01:
-        driver: bridge
-        driver_opts:
-          com.docker.network.bridge.enable_ip_masquerade: 'false'
-          com.docker.network.bridge.gateway_mode_ipv4: 'routed'
-          com.docker.network.container_iface_prefix: 'eth1'
-        ipam:
-          config:
-            - subnet: 192.168.20.0/24
-    lan02:
-        driver: bridge
-        driver_opts:
-          com.docker.network.bridge.enable_ip_masquerade: 'false'
-          com.docker.network.bridge.gateway_mode_ipv4: 'routed'
-          com.docker.network.container_iface_prefix: 'eth2'
-        ipam:
-          config:
-            - subnet: 192.168.30.0/24
+  default:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.enable_ip_masquerade: "true"
+      com.docker.network.bridge.gateway_mode_ipv4: "nat"
+      com.docker.network.container_iface_prefix: "eth"
+    ipam:
+      config:
+        - subnet: 192.168.10.0/24
+  lan01:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.enable_ip_masquerade: "false"
+      com.docker.network.bridge.gateway_mode_ipv4: "routed"
+      com.docker.network.container_iface_prefix: "eth1"
+    ipam:
+      config:
+        - subnet: 192.168.20.0/24
+  lan02:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.enable_ip_masquerade: "false"
+      com.docker.network.bridge.gateway_mode_ipv4: "routed"
+      com.docker.network.container_iface_prefix: "eth2"
+    ipam:
+      config:
+        - subnet: 192.168.30.0/24
