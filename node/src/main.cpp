@@ -9,17 +9,17 @@
 #include <tins/tins.h>
 #include <unistd.h>
 
-#include "config.hpp"
-#include "ip_util.hpp"
-#include "postman.hpp"
-#include "sniffer.hpp"
+#include "argh.h"
 #include "spdlog/common.h"
 #include "spdlog/spdlog.h"
 #include "tins/ip.h"
 #include "tins/sniffer.h"
 
-#include "argh.h"
+#include "config.hpp"
 #include "db.hpp"
+#include "ip_util.hpp"
+#include "postman.hpp"
+#include "sniffer.hpp"
 #include "traffic_data.hpp"
 #include "traffic_stat.hpp"
 
