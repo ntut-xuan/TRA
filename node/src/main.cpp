@@ -2,7 +2,6 @@
 #include <cstdlib>
 #include <ctime>
 #include <date/date.h>
-#include <iostream>
 #include <memory>
 #include <pthread.h>
 #include <sched.h>
@@ -20,7 +19,6 @@
 #include "tins/sniffer.h"
 
 #include "argh.h"
-#include "cpu.hpp"
 #include "db.hpp"
 #include "traffic_data.hpp"
 #include "traffic_stat.hpp"
