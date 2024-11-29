@@ -40,14 +40,23 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(sockpp)
 set (SOCKPP_LIBRARIES "${CMAKE_BINARY_DIR}/_deps/sockpp-src/include")
 
+FetchContent_Declare(
+  argh
+  GIT_REPOSITORY https://github.com/adishavit/argh.git
+  GIT_TAGS v1.3.2
+)
+FetchContent_MakeAvailable(argh)
+set (ARGH_LIBRARIES "${CMAKE_BINARY_DIR}/_deps/argh-src/")
+
 include_directories(${libtins_SOURCE_DIR}/include)
 include_directories(${date_SOURCE_DIR}/include)
 include_directories(${CMAKE_SOURCE_DIR}/include)
 include_directories(${SOCKPP_LIBRARIES})
+include_directories(${ARGH_LIBRARIES})
 
 add_executable(TRA  node/src/main.cpp  node/src/db.cpp node/src/config.cpp)
-target_include_directories(TRA PRIVATE ${INCLUDE_DIR} ${SPDLOG_LIBRARIES})
-target_link_libraries(TRA PRIVATE tins date)
+target_include_directories(TRA PRIVATE ${INCLUDE_DIR} ${SPDLOG_LIBRARIES} ${ARGH_LIBRARIES})
+target_link_libraries(TRA PRIVATE tins date argh)
 set_target_properties(TRA PROPERTIES LINKER_LANGUAGE CXX)
 set_target_properties(TRA PROPERTIES OUTPUT_NAME "${CMAKE_SOURCE_DIR}/build/TRA")
 

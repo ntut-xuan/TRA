@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <date/date.h>
+#include <iostream>
 #include <memory>
 #include <pthread.h>
 #include <sched.h>
@@ -13,10 +14,12 @@
 #include "ip_util.hpp"
 #include "postman.hpp"
 #include "sniffer.hpp"
+#include "spdlog/common.h"
 #include "spdlog/spdlog.h"
 #include "tins/ip.h"
 #include "tins/sniffer.h"
 
+#include "argh.h"
 #include "cpu.hpp"
 #include "db.hpp"
 #include "traffic_data.hpp"
@@ -70,26 +73,41 @@ void *print_report(void *data) {
 }
 
 int main(int argc, char *argv[]) {
-    if (argc < 3) {
-        spdlog::error("Error: Should have two port.");
-        spdlog::error("Usage: ./TRA <INPUT> <OUTPUT> <UPFN4IP> | <CONTROLLER_IP> ");
-        return 0;
+    argh::parser parser;
+    parser.add_params({"-i", "--input", "-o", "--output", "-s", "--selfip", "-c", "--controller"});
+    parser.parse(argc, argv);
+
+    std::string input_port;
+    if (!(parser({"-i", "--input"}) >> input_port)) {
+        spdlog::error("Error: Need input port, got '{0}'.", parser("input").str());
+        spdlog::error("Usage: ./TRA -i <INPUT> -o <OUTPUT> -u <UPFN4IP> | -c <CONTROLLER_IP> ");
+        return -1;
     }
 
-    if (argc < 4) {
-        spdlog::error("Error: Should have UPF N4 IP.");
-        spdlog::error("Usage: ./TRA <INPUT> <OUTPUT> <UPFN4IP> | <CONTROLLER_IP> ");
-        return 0;
+    std::string output_port;
+    if (!(parser({"-o", "--output"}) >> output_port)) {
+        spdlog::error("Error: Need output port.");
+        spdlog::error("Usage: ./TRA -i <INPUT> -o <OUTPUT> -u <UPFN4IP> | -c <CONTROLLER_IP> ");
+        return -1;
     }
 
-    std::string input_port = argv[1];
-    std::string output_port = argv[2];
-    std::string upfn4ip = argv[3];
+    std::string upfn4ip;
+    if (!(parser({"-s", "--selfip"}) >> upfn4ip)) {
+        spdlog::error("Error: Need self IP.");
+        spdlog::error("Usage: ./TRA -i <INPUT> -o <OUTPUT> -s <SELF_IP> | -c <CONTROLLER_IP> ");
+        return -1;
+    } else {
+        ConfigSingleton::get_instance().setup_upf_n4_ip(upfn4ip);
+    }
 
-    ConfigSingleton::get_instance().setup_upf_n4_ip(upfn4ip);
+    bool is_open_debug_mode;
+    is_open_debug_mode = parser[{"-v", "--verbose"}];
+    if (is_open_debug_mode) {
+        spdlog::set_level(spdlog::level::debug);
+    }
 
-    if (argc == 5) {
-        std::string controller_ip = argv[4];
+    std::string controller_ip;
+    if ((parser({"-c", "--controller"}) >> controller_ip)) {
         ConfigSingleton::get_instance().setup_controller_ip(controller_ip);
     }
 
