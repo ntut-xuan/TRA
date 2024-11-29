@@ -33,6 +33,12 @@ void *sniffer_worker(void *data) {
         auto current_time = system_clock::now();
         auto current_time_nanosecond = date::floor<nanoseconds>(current_time);
         Tins::IP packet = pdu.rfind_pdu<Tins::IP>();
+
+        try {
+            packet = packet.rfind_pdu<Tins::IP>();
+        } catch (Tins::pdu_not_found) {
+        }
+
         TrafficRecordSingleton::get_instance().handle_data(
             TrafficData(current_time.time_since_epoch().count(), packet.protocol(),
                         packet.src_addr().to_string().c_str(), packet.dst_addr().to_string().c_str(), packet.id()));
