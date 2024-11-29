@@ -70,7 +70,7 @@ void *print_report(void *data) {
 
 int main(int argc, char *argv[]) {
     argh::parser parser;
-    parser.add_params({"-i", "--input", "-o", "--output", "-s", "--selfip", "-c", "--controller"});
+    parser.add_params({"-i", "--input", "-o", "--output", "-s", "--selfip", "-c", "--controller", "-v", "--verbose"});
     parser.parse(argc, argv);
 
     std::string input_port;
