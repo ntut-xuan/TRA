@@ -25,8 +25,6 @@
 
 using namespace std::chrono;
 
-typedef std::pair<Tins::Sniffer, std::string> sniffer_bundle;
-
 void *sniffer_worker(void *data) {
     Sniffer *sniffer = (Sniffer *)(data);
 
