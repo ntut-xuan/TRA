@@ -44,8 +44,11 @@ class TrafficStat {
                           data.get_identification(), this->get_wait_packet(), data.get_time_in_nanoseconds() / 1e9);
             add_transmit_packet(data);
         } else {
-            spdlog::debug("[REQ] Receive request with identification {0} / Timestamp {1}", data.get_identification(),
-                          data.get_time_in_nanoseconds() / 1e9);
+            spdlog::debug("[REQ] Receive request with identification {0} / Timestamp {1} / "
+                          "Protocol {3}({2}) / Source IP {4} / Destination IP {5}",
+                          data.get_identification(), data.get_time_in_nanoseconds() / 1e9, data.get_protocol(),
+                          data.get_protocol_name(), data.get_source_ip().to_string(),
+                          data.get_destination_ip().to_string());
             add_request_packet(data);
         }
     }

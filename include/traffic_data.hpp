@@ -1,21 +1,22 @@
 #ifndef TRAFFIC_DATA_H
 #define TRAFFIC_DATA_H
 
+#include "protocol.hpp"
 #include <tins/tins.h>
 
 class TrafficData {
   private:
     long long nanoseconds;
-    int type;
+    int protocol;
     Tins::IPv4Address source_ip;
     Tins::IPv4Address destination_ip;
     int identification;
 
   public:
     TrafficData() = default;
-    TrafficData(long long nanoseconds, int type, Tins::IPv4Address source_ip, Tins::IPv4Address destination_ip,
+    TrafficData(long long nanoseconds, int protocol, Tins::IPv4Address source_ip, Tins::IPv4Address destination_ip,
                 int identification)
-        : nanoseconds(nanoseconds), type(type), source_ip(source_ip), destination_ip(destination_ip),
+        : nanoseconds(nanoseconds), protocol(protocol), source_ip(source_ip), destination_ip(destination_ip),
           identification(identification) {}
 
     bool operator==(const TrafficData &other_traffic_data) const {
@@ -28,7 +29,9 @@ class TrafficData {
 
     long long get_time_in_nanoseconds() const { return nanoseconds; }
 
-    int get_type() { return type; }
+    int get_protocol() { return protocol; }
+
+    std::string get_protocol_name() { return convert_ipv4_protocol_to_string(protocol); }
 
     Tins::IPv4Address get_source_ip() { return source_ip; }
 
