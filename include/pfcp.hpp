@@ -2,6 +2,7 @@
 #define PFCP_HPP
 
 #include "traffic_stat.hpp"
+#include <algorithm>
 #include <cmath>
 #include <vector>
 
@@ -39,10 +40,13 @@ inline std::vector<uint8_t> convert_traffic_stat_into_pfcp_packet(TrafficStat st
 
     /* --- IE Header --- */
 
+    std::vector<uint8_t> upfn4ip_vec = to_uint8_t_arrays(stat.get_upf_n4_ip(), 4);
+    std::reverse(upfn4ip_vec.begin(), upfn4ip_vec.end());
+
     concatenate_uint8t_array(packet, to_uint8_t_arrays(21122, 2));                // IE Type
     concatenate_uint8t_array(packet, to_uint8_t_arrays(25, 2));                   // IE Length
     concatenate_uint8t_array(packet, to_uint8_t_arrays(0, 1));                    // Spare
-    concatenate_uint8t_array(packet, to_uint8_t_arrays(stat.get_upf_n4_ip(), 4)); // UPFN4IP
+    concatenate_uint8t_array(packet, upfn4ip_vec);                                // UPFN4IP
     concatenate_uint8t_array(packet, to_uint8_t_arrays(stat.get_cpu_usage(), 2)); // CPU Usage
 
     /* Packet Loss */

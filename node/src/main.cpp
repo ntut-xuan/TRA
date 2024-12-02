@@ -10,9 +10,11 @@
 #include <unistd.h>
 
 #include "argh.h"
+#include "gtpu_identifier.hpp"
 #include "spdlog/common.h"
 #include "spdlog/spdlog.h"
 #include "tins/ip.h"
+#include "tins/rawpdu.h"
 #include "tins/sniffer.h"
 
 #include "config.hpp"
@@ -20,6 +22,7 @@
 #include "ip_util.hpp"
 #include "postman.hpp"
 #include "sniffer.hpp"
+#include "tins/udp.h"
 #include "traffic_data.hpp"
 #include "traffic_stat.hpp"
 
@@ -33,14 +36,17 @@ void *sniffer_worker(void *data) {
         auto current_time_nanosecond = date::floor<nanoseconds>(current_time);
         Tins::IP packet = pdu.rfind_pdu<Tins::IP>();
 
-        try {
-            packet = packet.rfind_pdu<Tins::IP>();
-        } catch (Tins::pdu_not_found) {
+        int identification = packet.id();
+
+        Tins::UDP *udp = pdu.find_pdu<Tins::UDP>();
+        if (udp != nullptr && is_gtpu_packet(udp)) {
+            spdlog::debug("Found GTP-U Packet / UDP CHKSUM {0}", udp->checksum());
+            identification = extract_gtpu_packet_identification(udp);
         }
 
         TrafficRecordSingleton::get_instance().handle_data(
             TrafficData(current_time.time_since_epoch().count(), packet.protocol(),
-                        packet.src_addr().to_string().c_str(), packet.dst_addr().to_string().c_str(), packet.id()));
+                        packet.src_addr().to_string().c_str(), packet.dst_addr().to_string().c_str(), identification));
         return true;
     });
 
