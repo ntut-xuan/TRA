@@ -10,6 +10,7 @@
 #include <unistd.h>
 
 #include "argh.h"
+#include "cpu.hpp"
 #include "gtpu_identifier.hpp"
 #include "spdlog/common.h"
 #include "spdlog/spdlog.h"
@@ -59,14 +60,14 @@ void *print_report(void *data) {
         int query_timestamp = current_timestamp - 1;
 
         TrafficStat traffic_stat = TrafficRecordSingleton::get_instance().get_traffic_stat(query_timestamp);
+        double cpu_usage = fetch_cpu_usage();
 
         spdlog::info(
             "[REPORT] Timestamp {1} / Packet Loss {0}% / RECV {2} / TRANSMIT {3} / QUEUEING_DALAY {4} ms / CPU {5}%",
             traffic_stat.get_packet_loss() * 100, query_timestamp, traffic_stat.get_received_packet(),
-            traffic_stat.get_transmitted_packet(), traffic_stat.get_queueing_delay_in_nanosecond() / 1e6,
-            traffic_stat.get_cpu_usage());
+            traffic_stat.get_transmitted_packet(), traffic_stat.get_queueing_delay_in_nanosecond() / 1e6, cpu_usage);
 
-        submit_report(traffic_stat, ConfigSingleton::get_controller_ip(), 8805);
+        submit_report(traffic_stat, ConfigSingleton::get_controller_ip(), 8805, cpu_usage);
 
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }

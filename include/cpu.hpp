@@ -1,12 +1,15 @@
 #ifndef CPU_HPP
 #define CPU_HPP
 
+#include "db.hpp"
 #include <cstdio>
+#include <sys/_pthread/_pthread_mutex_t.h>
 
 static unsigned long long lastTotalUser, lastTotalUserLow, lastTotalSys, lastTotalIdle;
 
 inline double fetch_cpu_usage() {
     double percent;
+
     FILE *file;
     unsigned long long totalUser, totalUserLow, totalSys, totalIdle, total;
 

@@ -10,7 +10,6 @@
 
 class TrafficStat {
   private:
-    int cpu_usage = 0;
     uint32_t upfn4ip = 0;
     int timestamp = 0;
     long long total_delay_time_in_nanosecond = 0;
@@ -18,10 +17,10 @@ class TrafficStat {
     std::set<TrafficData> waiting_set;
 
   public:
-    TrafficStat() : upfn4ip(0), timestamp(0), cpu_usage(fetch_cpu_usage()) {
+    TrafficStat() : upfn4ip(0), timestamp(0) {
         this->upfn4ip = convert_ip_str_to_uint32_t(ConfigSingleton::get_upf_n4_ip());
     }
-    TrafficStat(uint32_t upfn4ip, int timestamp) : cpu_usage(fetch_cpu_usage()) {
+    TrafficStat(uint32_t upfn4ip, int timestamp) {
         this->upfn4ip = upfn4ip;
         this->timestamp = timestamp;
     }
@@ -73,7 +72,6 @@ class TrafficStat {
     int get_wait_packet() { return waiting_set.size(); }
     int get_received_packet() { return receive_set.size(); }
     int get_transmitted_packet() { return receive_set.size() - waiting_set.size(); }
-    int get_cpu_usage() { return cpu_usage; }
     int get_upf_n4_ip() { return upfn4ip; }
     int get_timestamp() { return timestamp; }
 };
