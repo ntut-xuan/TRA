@@ -3,7 +3,6 @@
 
 #include "db.hpp"
 #include <cstdio>
-#include <sys/_pthread/_pthread_mutex_t.h>
 
 static unsigned long long lastTotalUser, lastTotalUserLow, lastTotalSys, lastTotalIdle;
 
