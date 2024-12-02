@@ -1,4 +1,5 @@
 #include <chrono>
+#include <cstddef>
 #include <cstdlib>
 #include <ctime>
 #include <date/date.h>
@@ -36,7 +37,6 @@ void *sniffer_worker(void *data) {
         auto current_time = system_clock::now();
         auto current_time_nanosecond = date::floor<nanoseconds>(current_time);
         Tins::IP packet = pdu.rfind_pdu<Tins::IP>();
-
         int identification = packet.id();
 
         Tins::UDP *udp = pdu.find_pdu<Tins::UDP>();
