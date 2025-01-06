@@ -4,6 +4,8 @@
 >
 > The packet may delay but it will reach the destination, LOL.
 
+![TRA](https://github.com/user-attachments/assets/8280af8a-193d-44ea-b4f5-d5c19bb62226)
+
 TRA (Traffic Realtime Analysis) is an application to fetch packet loss and queueing delay between two network interface.
 
 With TRA, it can sniff receive packet and transmit packet and check the packet is transmit through your service successfully or not.
