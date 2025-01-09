@@ -83,14 +83,14 @@ int main(int argc, char *argv[]) {
     std::string input_port;
     if (!(parser({"-i", "--input"}) >> input_port)) {
         spdlog::error("Error: Need input port, got '{0}'.", parser("input").str());
-        spdlog::error("Usage: ./TRA -i <INPUT> -o <OUTPUT> -u <UPFN4IP> | -c <CONTROLLER_IP> ");
+        spdlog::error("Usage: ./TRA -i <INPUT> -o <OUTPUT> -s <SELF_IP> | -c <CONTROLLER_IP> ");
         return -1;
     }
 
     std::string output_port;
     if (!(parser({"-o", "--output"}) >> output_port)) {
         spdlog::error("Error: Need output port.");
-        spdlog::error("Usage: ./TRA -i <INPUT> -o <OUTPUT> -u <UPFN4IP> | -c <CONTROLLER_IP> ");
+        spdlog::error("Usage: ./TRA -i <INPUT> -o <OUTPUT> -s <SELF_IP> | -c <CONTROLLER_IP> ");
         return -1;
     }
 
