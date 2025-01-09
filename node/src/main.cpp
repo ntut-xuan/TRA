@@ -77,46 +77,38 @@ void *print_report(void *data) {
 
 int main(int argc, char *argv[]) {
     argh::parser parser;
-    parser.add_params({"-i", "--input", "-o", "--output", "-s", "--selfip", "-c", "--controller", "-v", "--verbose"});
+    parser.add_params({"-i", "--input", "-o", "--output", "--config-file"});
     parser.parse(argc, argv);
 
     std::string input_port;
     if (!(parser({"-i", "--input"}) >> input_port)) {
         spdlog::error("Error: Need input port, got '{0}'.", parser("input").str());
-        spdlog::error("Usage: ./TRA -i <INPUT> -o <OUTPUT> -s <SELF_IP> | -c <CONTROLLER_IP> ");
+        spdlog::error("Usage: ./TRA -i <INPUT> -o <OUTPUT> --config-file <CONFIG_FILE_PATH> ");
         return -1;
     }
 
     std::string output_port;
     if (!(parser({"-o", "--output"}) >> output_port)) {
         spdlog::error("Error: Need output port.");
-        spdlog::error("Usage: ./TRA -i <INPUT> -o <OUTPUT> -s <SELF_IP> | -c <CONTROLLER_IP> ");
+        spdlog::error("Usage: ./TRA -i <INPUT> -o <OUTPUT> --config-file <CONFIG_FILE_PATH> ");
         return -1;
     }
 
-    std::string upfn4ip;
-    if (!(parser({"-s", "--selfip"}) >> upfn4ip)) {
-        spdlog::error("Error: Need self IP.");
-        spdlog::error("Usage: ./TRA -i <INPUT> -o <OUTPUT> -s <SELF_IP> | -c <CONTROLLER_IP> ");
-        return -1;
-    } else {
-        ConfigSingleton::get_instance().setup_upf_n4_ip(upfn4ip);
-    }
-
-    bool is_open_debug_mode;
-    is_open_debug_mode = parser[{"-v", "--verbose"}];
-    if (is_open_debug_mode) {
-        spdlog::set_level(spdlog::level::debug);
-    }
-
-    std::string controller_ip;
-    if ((parser({"-c", "--controller"}) >> controller_ip)) {
-        ConfigSingleton::get_instance().setup_controller_ip(controller_ip);
+    std::string config_path;
+    if ((parser({"--config-file"}) >> config_path)) {
+        ConfigSingleton::load_configuration_file(config_path);
     }
 
     spdlog::info("Input Port: {0}", input_port);
     spdlog::info("Output Port: {0}", output_port);
-    spdlog::info("IP: {0}({1})", upfn4ip, convert_ip_str_to_uint32_t(upfn4ip));
+    spdlog::info("IP: {0}({1})", ConfigSingleton::get_upf_n4_ip(),
+                 convert_ip_str_to_uint32_t(ConfigSingleton::get_upf_n4_ip()));
+    spdlog::info("Input Filter: Source IP {0} / Destination IP {1}",
+                 ConfigSingleton::get_input_filter().get_source_ip(),
+                 ConfigSingleton::get_input_filter().get_destination_ip());
+    spdlog::info("Output Filter: Source IP {0} / Destination IP {1}",
+                 ConfigSingleton::get_output_filter().get_source_ip(),
+                 ConfigSingleton::get_output_filter().get_destination_ip());
 
     if (ConfigSingleton::get_instance().is_setup_controller_ip()) {
         spdlog::info("Controller IP: {0}", ConfigSingleton::get_controller_ip());
@@ -124,7 +116,7 @@ int main(int argc, char *argv[]) {
 
     spdlog::info("Start to capture the packet.");
 
-    TrafficRecordSingleton::get_instance().setup_upfn4ip(convert_ip_str_to_uint32_t(upfn4ip));
+    TrafficRecordSingleton::get_instance().setup_upfn4ip(convert_ip_str_to_uint32_t(ConfigSingleton::get_upf_n4_ip()));
 
     Tins::SnifferConfiguration config;
     config.set_immediate_mode(true);

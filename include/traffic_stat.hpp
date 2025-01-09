@@ -37,6 +37,12 @@ class TrafficStat {
         waiting_set.erase(data);
     }
     void handle_packet(TrafficData data) {
+        if (!((data.get_source_ip() == ConfigSingleton::get_input_filter().get_source_ip() &&
+               data.get_destination_ip() == ConfigSingleton::get_input_filter().get_destination_ip()) ||
+              (data.get_source_ip() == ConfigSingleton::get_output_filter().get_source_ip() &&
+               data.get_destination_ip() == ConfigSingleton::get_output_filter().get_destination_ip()))) {
+            return;
+        }
         if (is_received_packet(data)) {
             spdlog::debug("[RESP] Receive response with identification {0} / "
                           "Waiting Packet {1} / Timestamp {2} / Protocol {3}({4}) / Source IP {5} / Destination IP {6}",

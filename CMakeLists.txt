@@ -48,6 +48,13 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(argh)
 set (ARGH_LIBRARIES "${CMAKE_BINARY_DIR}/_deps/argh-src/")
 
+FetchContent_Declare(json
+    GIT_REPOSITORY https://github.com/nlohmann/json
+    GIT_TAG v3.11.3
+)
+FetchContent_MakeAvailable(json)
+set (JSON_LIBRARIES "${CMAKE_BINARY_DIR}/_deps/json-src/include")
+
 include_directories(${libtins_SOURCE_DIR}/include)
 include_directories(${date_SOURCE_DIR}/include)
 include_directories(${CMAKE_SOURCE_DIR}/include)
@@ -55,7 +62,7 @@ include_directories(${SOCKPP_LIBRARIES})
 include_directories(${ARGH_LIBRARIES})
 
 add_executable(TRA  node/src/main.cpp  node/src/db.cpp node/src/config.cpp)
-target_include_directories(TRA PRIVATE ${INCLUDE_DIR} ${SPDLOG_LIBRARIES} ${ARGH_LIBRARIES})
+target_include_directories(TRA PRIVATE ${INCLUDE_DIR} ${SPDLOG_LIBRARIES} ${ARGH_LIBRARIES} ${JSON_LIBRARIES})
 target_link_libraries(TRA PRIVATE tins date argh)
 set_target_properties(TRA PROPERTIES LINKER_LANGUAGE CXX)
 set_target_properties(TRA PROPERTIES OUTPUT_NAME "${CMAKE_SOURCE_DIR}/build/TRA")
