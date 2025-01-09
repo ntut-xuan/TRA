@@ -43,9 +43,6 @@ class TrafficStat {
                           data.get_identification(), this->get_wait_packet(), data.get_time_in_nanoseconds() / 1e9);
             add_transmit_packet(data);
         } else {
-            if (data.get_source_ip() == "192.168.43.21") {
-                return;
-            }
             spdlog::debug("[REQ] Receive request with identification {0} / Timestamp {1} / "
                           "Protocol {3}({2}) / Source IP {4} / Destination IP {5}",
                           data.get_identification(), data.get_time_in_nanoseconds() / 1e9, data.get_protocol(),
