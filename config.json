@@ -1,12 +1,12 @@
 {
-  "self_ip": "127.0.0.1",
+  "self_ip": "192.168.43.201",
   "controller_ip": "127.0.0.1",
   "input_filter": {
-    "source_ip": "127.0.0.1",
-    "destination_ip": "127.0.0.1"
+    "source_ip": "192.168.20.103",
+    "destination_ip": "192.168.30.103"
   },
   "output_filter": {
-    "source_ip": "127.0.0.1",
-    "destination_ip": "127.0.0.1"
+    "source_ip": "192.168.30.103",
+    "destination_ip": "192.168.20.103"
   }
 }

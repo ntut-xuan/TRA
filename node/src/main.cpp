@@ -16,7 +16,6 @@
 #include "spdlog/common.h"
 #include "spdlog/spdlog.h"
 #include "tins/ip.h"
-#include "tins/rawpdu.h"
 #include "tins/sniffer.h"
 
 #include "config.hpp"
@@ -67,6 +66,7 @@ void *print_report(void *data) {
             traffic_stat.get_packet_loss() * 100, query_timestamp, traffic_stat.get_received_packet(),
             traffic_stat.get_transmitted_packet(), traffic_stat.get_queueing_delay_in_nanosecond() / 1e6, cpu_usage);
 
+        create_spacp(traffic_stat, query_timestamp);
         submit_report(traffic_stat, ConfigSingleton::get_controller_ip(), 8805, cpu_usage);
 
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));

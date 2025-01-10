@@ -8,4 +8,4 @@ RUN mkdir ./build
 RUN cmake -Bbuild . -GNinja
 RUN cmake --build ./build
 
-CMD ./build/TRA -i $INPUT -o $OUTPUT -s $SELF_IP -c $CONTROLLER_IP
+CMD ./build/TRA -i $INPUT -o $OUTPUT --config-file $CONFIG

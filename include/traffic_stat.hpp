@@ -2,17 +2,16 @@
 #define TRAFFIC_STAT_HPP
 
 #include "config.hpp"
-#include "cpu.hpp"
 #include "ip_util.hpp"
 #include "spdlog/spdlog.h"
 #include "traffic_data.hpp"
-#include <climits>
 
 class TrafficStat {
   private:
     uint32_t upfn4ip = 0;
     int timestamp = 0;
     long long total_delay_time_in_nanosecond = 0;
+    std::vector<TrafficData> record;
     std::set<TrafficData> receive_set;
     std::set<TrafficData> waiting_set;
 
@@ -24,11 +23,14 @@ class TrafficStat {
         this->upfn4ip = upfn4ip;
         this->timestamp = timestamp;
     }
+    std::vector<TrafficData> get_record() { return record; }
     void add_request_packet(TrafficData data) {
+        record.push_back(data);
         receive_set.insert(data);
         waiting_set.insert(data);
     }
     void add_transmit_packet(TrafficData data) {
+        record.push_back(data);
         auto req_packet = waiting_set.find(data);
         if (waiting_set.find(data) != waiting_set.end()) {
             total_delay_time_in_nanosecond +=
