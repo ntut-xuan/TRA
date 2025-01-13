@@ -69,8 +69,8 @@ void ConfigSingleton::load_configuration_file(std::string filepath) {
     }
 
     json output_filter = config_json["output_filter"].get<json>();
-    std::string output_source_ip = input_filter["source_ip"].get<std::string>();
-    std::string output_dest_ip = input_filter["destination_ip"].get<std::string>();
+    std::string output_source_ip = output_filter["source_ip"].get<std::string>();
+    std::string output_dest_ip = output_filter["destination_ip"].get<std::string>();
 
     ConfigSingleton::setup_input_filter(PacketFilterConfiguration(input_source_ip, input_dest_ip));
     ConfigSingleton::setup_output_filter(PacketFilterConfiguration(output_source_ip, output_dest_ip));
